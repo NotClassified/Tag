@@ -6,19 +6,16 @@ using System.Collections.Generic;
 public class ScoreBoard : NetworkBehaviour {
 
     public GameObject canvas;
-    [SerializeField]
-    GameObject content;
-    [SerializeField]
-    private GameObject prefab;
+    public GameObject content;
+    public GameObject prefab;
 
     [SerializeField]
     GameObject[] clients;
-    [SerializeField]
-    List<GameObject> boardItems = new List<GameObject>();
+    public List<GameObject> boardItems = new List<GameObject>();
 
-    List<string> clientNames = new List<string>();
-    List<int> clientTags = new List<int>();
-    List<int> clientTagged = new List<int>();
+    public List<string> clientNames = new List<string>();
+    public List<int> clientTags = new List<int>();
+    public List<int> clientTagged = new List<int>();
     
     private void Start()
     {
@@ -33,12 +30,6 @@ public class ScoreBoard : NetworkBehaviour {
             clientNames.Add(client.GetComponent<PlayerGameData>().playerName);
             clientTags.Add(client.GetComponent<PlayerGameData>().numTags);
             clientTagged.Add(client.GetComponent<PlayerGameData>().numTagged);
-        }
-        for(int i = 0; i < clientNames.Count; i++)
-        {
-            boardItems.Add(Instantiate(prefab));
-            boardItems[i].transform.SetParent(content.transform);
-            boardItems[i].transform.GetChild(0).GetComponent<Text>().text = clientNames[i];
         }
     }
 

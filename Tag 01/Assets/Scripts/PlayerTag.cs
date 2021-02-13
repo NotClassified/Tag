@@ -28,7 +28,6 @@ public class PlayerTag : NetworkBehaviour {
     public bool tagged = false;
     public bool collided;
     
-    ScoreBoard sb;
     [SerializeField]
     PlayerGameData pgd;
     public PlayerGameData pgdC;
@@ -56,12 +55,10 @@ public class PlayerTag : NetworkBehaviour {
         gameOverText.text = "";
         beTaggedButton = gameButtons.transform.GetChild(0).gameObject;
         beTaggedButton.GetComponent<Button>().onClick.AddListener(BeTagged);
-        sb = GameObject.Find("Score Board").GetComponent<ScoreBoard>();
     }
 
     void BeTagged()
     {
-        sb.SetBoard();
         CmdBeTagged();
     }
     //sync tag state to server & clients
@@ -99,6 +96,7 @@ public class PlayerTag : NetworkBehaviour {
                 collided = true;
                 Invoke("CollOff", 15f);
             }
+            pgd.SetBoard();
             CmdReferenceUI();
         }
     }
