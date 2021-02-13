@@ -2,10 +2,10 @@
 using UnityEngine.Networking;
 
 public class PlayerGameData : NetworkBehaviour {
-    
+
     ScoreBoard sb;
 
-    public string inputName;
+    string inputName;
     public string playerName;
     public int numTags;
     public int numTagged;
@@ -17,20 +17,18 @@ public class PlayerGameData : NetworkBehaviour {
 
     public void SetName(string _name) { inputName = _name; }
     [Command]
-    void CmdSetName() { RpcSetName(inputName); }
+    void CmdSetName() { RpcSetName(); }
     [ClientRpc]
-    void RpcSetName(string _name)
-    {
-        playerName = _name;
-        Debug.Log("PGD SetName: " + playerName);
+    void RpcSetName() {
+        playerName = inputName;
+
     }
 
     public void SetScores(int _tags, int _tagged)
     {
-        Debug.Log("PGD Set Scores");
         numTags += _tags;
         numTagged += _tagged;
-        sb.CmdSetBoardScores(playerName, numTags, numTagged);
+        sb.SetBoardScores(playerName, numTags, numTagged);
     }
 
     void Update () {
