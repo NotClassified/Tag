@@ -61,15 +61,12 @@ public class PlayerTag : NetworkBehaviour {
 
     void BeTagged()
     {
-        sb.SetBoard();
+        sb.CmdSetBoard();
         CmdBeTagged();
     }
     //sync tag state to server & clients
     [Command]
-    void CmdBeTagged()
-    {
-        RpcBeTagged();
-    }
+    void CmdBeTagged() { RpcBeTagged(); }
     [ClientRpc]
     void RpcBeTagged()
     {
@@ -104,10 +101,7 @@ public class PlayerTag : NetworkBehaviour {
     }
 
     [Command]
-    void CmdReferenceUI()
-    {
-        RpcReferenceUI();
-    }
+    void CmdReferenceUI() { RpcReferenceUI(); }
     [ClientRpc]
     void RpcReferenceUI()
     {
@@ -149,16 +143,10 @@ public class PlayerTag : NetworkBehaviour {
         }
     }
 
-    void CollOff()
-    {
-        CmdColl(false);
-    }
+    void CollOff() { CmdColl(false); }
     //sync collide state to server & clients
     [Command]
-    void CmdColl(bool _collided)
-    {
-        RpcColl(_collided);
-    }
+    void CmdColl(bool _collided) { RpcColl(_collided); }
     [ClientRpc]
     void RpcColl(bool _collided)
     {
@@ -167,10 +155,7 @@ public class PlayerTag : NetworkBehaviour {
 
     //sync collided player referecnces to server & clients
     [Command]
-    void CmdCollPlayer(GameObject _collision)
-    {
-        RpcCollPlayer(_collision);
-    }
+    void CmdCollPlayer(GameObject _collision) { RpcCollPlayer(_collision); }
     [ClientRpc]
     void RpcCollPlayer(GameObject _collision)
     {
@@ -181,10 +166,7 @@ public class PlayerTag : NetworkBehaviour {
 
     //sync tag state to server & clients
     [Command]
-    void CmdTag(bool _tagged, bool _tag)
-    {
-        RpcTag(_tagged, _tag);
-    }
+    void CmdTag(bool _tagged, bool _tag) { RpcTag(_tagged, _tag); }
     [ClientRpc]
     void RpcTag(bool _tagged, bool _tag)
     {
@@ -253,10 +235,7 @@ public class PlayerTag : NetworkBehaviour {
         }
     }
     [Command]
-    void CmdGameOver()
-    {
-        RpcGameOver();
-    }
+    void CmdGameOver() { RpcGameOver(); }
     [ClientRpc]
     void RpcGameOver()
     {
