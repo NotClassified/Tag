@@ -15,8 +15,6 @@ public class PlayerTag : NetworkBehaviour {
     //Timers:
     float timer;
     bool countdown = false;
-    float tempO;
-    float tempD;
     float gameTimer;
     bool gameCountdown;
 
@@ -193,8 +191,8 @@ public class PlayerTag : NetworkBehaviour {
         ptC.tagged = _tag;
         ptC.taggedText.text = "Tagged";
         ptC.TaggedTimerStart(5);
-        pgd.SetScores(1, 0);
-        pgdC.SetScores(0, 1);
+        pgd.SetScore(1, 0);
+        pgdC.SetScore(0, 1);
     }
 
     void TaggedTimerStart(int _time)
@@ -202,8 +200,6 @@ public class PlayerTag : NetworkBehaviour {
         //disable player movement & set and start timer
         if (!countdown)
         {
-            tempO = pm.origin_speed;
-            tempD = pm.diagnol_speed;
             pm.origin_speed = 0;
             pm.diagnol_speed = 0;
             timer = _time;
@@ -213,8 +209,8 @@ public class PlayerTag : NetworkBehaviour {
         else
         {
             pm.running = false;
-            pm.origin_speed = tempO;
-            pm.diagnol_speed = tempD;
+            pm.origin_speed = 2;
+            pm.diagnol_speed = pm.origin_speed / Mathf.Sqrt(2);
             countdown = false;
             gameTimer = 30;
         }

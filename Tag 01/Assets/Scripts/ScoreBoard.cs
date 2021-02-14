@@ -32,10 +32,4 @@ public class ScoreBoard : NetworkBehaviour {
             clientTagged.Add(client.GetComponent<PlayerGameData>().numTagged);
         }
     }
-
-    public void SetBoardScores(string _name, int _tags, int _tagged)
-    {
-        boardItems[clientNames.IndexOf(_name)].transform.GetChild(1).GetComponent<Text>().text = "" + _tags;
-        boardItems[clientNames.IndexOf(_name)].transform.GetChild(2).GetComponent<Text>().text = "" + _tagged;
-    }
 }

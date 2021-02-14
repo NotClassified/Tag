@@ -402,7 +402,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 929134254}
   m_HandleRect: {fileID: 929134253}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -565,7 +565,7 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 720, y: 405}
+  m_ReferenceResolution: {x: 720, y: 371.42}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -1075,7 +1075,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1000, y: 1000}
+  m_SizeDelta: {x: 1300, y: 800}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &517929587
 MonoBehaviour:
@@ -1122,7 +1122,6 @@ GameObject:
   - component: {fileID: 541520166}
   - component: {fileID: 541520165}
   - component: {fileID: 541520164}
-  - component: {fileID: 541520163}
   m_Layer: 5
   m_Name: Room List
   m_TagString: Untagged
@@ -1150,32 +1149,13 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &541520163
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 541520161}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1679637790, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreLayout: 0
-  m_MinWidth: -1
-  m_MinHeight: -1
-  m_PreferredWidth: -1
-  m_PreferredHeight: 200
-  m_FlexibleWidth: -1
-  m_FlexibleHeight: -1
-  m_LayoutPriority: 1
 --- !u!114 &541520164
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 541520161}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 1679637790, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
@@ -1993,6 +1973,9 @@ MonoBehaviour:
   prefab: {fileID: 1535236210852742, guid: d2ee078192452d844b0b982ee3b5cf30, type: 2}
   clients: []
   boardItems: []
+  clientNames: []
+  clientTags: 
+  clientTagged: 
 --- !u!4 &1061189794
 Transform:
   m_ObjectHideFlags: 0
@@ -3303,7 +3286,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 384.05002, y: 188.27939}
+  m_AnchoredPosition: {x: 384.05078, y: 188.2793}
   m_SizeDelta: {x: 671.8365, y: 329.36588}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2012246328

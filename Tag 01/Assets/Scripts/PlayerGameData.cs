@@ -1,34 +1,30 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
-using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class PlayerGameData : NetworkBehaviour {
 
     ScoreBoard sb;
-
-    string inputName;
+    
     public string playerName;
     public int numTags;
     public int numTagged;
+
 
     private void Start()
     {
         sb = GameObject.Find("Score Board").GetComponent<ScoreBoard>();
     }
-
-    public void SetName(string _name) { inputName = _name; }
+    
     [Command]
-    void CmdSetName() { RpcSetName(inputName); }
+    void CmdSetName(string _name) { RpcSetName(_name); }
     [ClientRpc]
-    void RpcSetName(string _name) {
+    void RpcSetName(string _name)
+    {
         playerName = _name;
     }
-    /*
-    [Command]
-    public void CmdSetBoard() { RpcSetBoard(); }
-    [ClientRpc]*/
-    public void /*Rpc*/SetBoard()
+
+    public void SetBoard()
     {
         sb.SetBoard();
         for (int i = 0; i < sb.clientNames.Count; i++)
@@ -36,14 +32,24 @@ public class PlayerGameData : NetworkBehaviour {
             sb.boardItems.Add(Instantiate(sb.prefab));
             sb.boardItems[i].transform.SetParent(sb.content.transform);
             sb.boardItems[i].transform.GetChild(0).GetComponent<Text>().text = sb.clientNames[i];
+            sb.boardItems[i].transform.GetChild(1).GetComponent<Text>().text = "" + sb.clientTags[i];
+            sb.boardItems[i].transform.GetChild(2).GetComponent<Text>().text = "" + sb.clientTagged[i];
         }
     }
 
-    public void SetScores(int _tags, int _tagged)
+    public void SetScore(int _tags, int _tagged)
     {
         numTags += _tags;
         numTagged += _tagged;
-        sb.SetBoardScores(playerName, numTags, numTagged);
+        CmdSetScores(numTags, numTagged);
+    }
+    [Command]
+    void CmdSetScores(int _tags, int _tagged) { RpcSetScores(_tags, _tagged); }
+    [ClientRpc]
+    void RpcSetScores(int _tags, int _tagged)
+    {
+        sb.boardItems[sb.clientNames.IndexOf(playerName)].transform.GetChild(1).GetComponent<Text>().text = "" + _tags;
+        sb.boardItems[sb.clientNames.IndexOf(playerName)].transform.GetChild(2).GetComponent<Text>().text = "" + _tagged;
     }
 
     void Update () {
