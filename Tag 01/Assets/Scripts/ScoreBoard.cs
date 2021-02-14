@@ -24,6 +24,10 @@ public class ScoreBoard : NetworkBehaviour {
 
     public void SetBoard()
     {
+        boardItems.Clear();
+        clientNames.Clear();
+        clientTags.Clear();
+        clientTagged.Clear();
         clients = GameObject.FindGameObjectsWithTag("Player");
         foreach (GameObject client in clients)
         {
