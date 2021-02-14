@@ -8,6 +8,7 @@ public class PlayerTag : NetworkBehaviour {
     public GameObject playerUI;
     public GameObject gameButtons;
     public GameObject beTaggedButton;
+    public GameObject inputField;
     public Text taggedText;
     Text timerText;
     Text gameTimerText;
@@ -87,10 +88,7 @@ public class PlayerTag : NetworkBehaviour {
     }
     //sync tag state to server & clients
     [Command]
-    void CmdBeTagged()
-    {
-        RpcBeTagged();
-    }
+    void CmdBeTagged() { RpcBeTagged(); }
     [ClientRpc]
     void RpcBeTagged()
     {
@@ -111,7 +109,9 @@ public class PlayerTag : NetworkBehaviour {
         {
             //disable tag button and game over text & tag the tagged player
             beTaggedButton.SetActive(false);
+            inputField.SetActive(false);
             gameOverText.text = "";
+            pb.boostNam.text = "";
             if (tagged)
             {
                 taggedText.text = "Tagged";
@@ -127,10 +127,7 @@ public class PlayerTag : NetworkBehaviour {
     }
 
     [Command]
-    void CmdReferenceUI()
-    {
-        RpcReferenceUI();
-    }
+    void CmdReferenceUI() { RpcReferenceUI(); }
     [ClientRpc]
     void RpcReferenceUI()
     {
@@ -172,28 +169,16 @@ public class PlayerTag : NetworkBehaviour {
         }
     }
 
-    void CollOff()
-    {
-        CmdColl(false);
-    }
+    void CollOff() { CmdColl(false); }
     //sync collide state to server & clients
     [Command]
-    void CmdColl(bool _collided)
-    {
-        RpcColl(_collided);
-    }
+    void CmdColl(bool _collided) { RpcColl(_collided); }
     [ClientRpc]
-    void RpcColl(bool _collided)
-    {
-        collided = _collided;
-    }
+    void RpcColl(bool _collided) { collided = _collided; }
 
     //sync collided player referecnces to server & clients
     [Command]
-    void CmdCollPlayer(GameObject _collision)
-    {
-        RpcCollPlayer(_collision);
-    }
+    void CmdCollPlayer(GameObject _collision) { RpcCollPlayer(_collision); }
     [ClientRpc]
     void RpcCollPlayer(GameObject _collision)
     {
@@ -204,10 +189,7 @@ public class PlayerTag : NetworkBehaviour {
 
     //sync tag state to server & clients
     [Command]
-    void CmdTag(bool _tagged, bool _tag)
-    {
-        RpcTag(_tagged, _tag);
-    }
+    void CmdTag(bool _tagged, bool _tag) { RpcTag(_tagged, _tag); }
     [ClientRpc]
     void RpcTag(bool _tagged, bool _tag)
     {
@@ -274,10 +256,7 @@ public class PlayerTag : NetworkBehaviour {
         }
     }
     [Command]
-    void CmdGameOver()
-    {
-        RpcGameOver();
-    }
+    void CmdGameOver() { RpcGameOver(); }
     [ClientRpc]
     void RpcGameOver()
     {
@@ -297,11 +276,9 @@ public class PlayerTag : NetworkBehaviour {
             //show game over UI & enable tag button
             gameOverText.text = "Game Over\n" + _name + " Lost";
             beTaggedButton.SetActive(true);
+            inputField.SetActive(true);
             Invoke("DisableGameOverText", 3f);
         }
     }
-    void DisableGameOverText()
-    {
-        gameOverText.text = "";
-    }
+    void DisableGameOverText() { gameOverText.text = ""; }
 }

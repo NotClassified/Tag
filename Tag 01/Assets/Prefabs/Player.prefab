@@ -1583,6 +1583,7 @@ MonoBehaviour:
   playerUI: {fileID: 1631746824867814}
   gameButtons: {fileID: 0}
   beTaggedButton: {fileID: 0}
+  inputField: {fileID: 1689362042931572}
   taggedText: {fileID: 0}
   rend: {fileID: 0}
   rendC: {fileID: 0}
@@ -1639,6 +1640,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ui: {fileID: 1139737736319442}
+  boostNam: {fileID: 0}
   prefab: {fileID: 1911667745965872, guid: 7f608408346dccd4797b76dfba086a33, type: 2}
   boosts: []
 --- !u!114 &114305256282129332

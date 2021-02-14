@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -8,7 +7,7 @@ public class PlayerBoosts : NetworkBehaviour {
 
     [SerializeField]
     GameObject ui;
-    Text boostNam;
+    public Text boostNam;
     bool haveBoost = false;
 
     [SerializeField]
