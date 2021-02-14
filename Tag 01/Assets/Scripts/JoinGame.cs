@@ -46,6 +46,7 @@ public class JoinGame : MonoBehaviour {
         {
             GameObject _roomList = Instantiate(roomListItemPrefreb);
             _roomList.transform.SetParent(roomListParent);
+            _roomList.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
 
             RoomListItem _roomListItem = _roomList.GetComponent<RoomListItem>();
             if(_roomListItem != null)

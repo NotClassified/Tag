@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.UI;
 using System.Collections.Generic;
 
 public class ScoreBoard : NetworkBehaviour {
@@ -28,6 +27,8 @@ public class ScoreBoard : NetworkBehaviour {
         clientNames.Clear();
         clientTags.Clear();
         clientTagged.Clear();
+        foreach (Transform child in content.transform)
+            Destroy(child.gameObject);
         clients = GameObject.FindGameObjectsWithTag("Player");
         foreach (GameObject client in clients)
         {

@@ -28,6 +28,8 @@ public class PlayerTag : NetworkBehaviour {
     
     [SerializeField]
     PlayerGameData pgd;
+    [SerializeField]
+    PlayerBoosts pb;
     public PlayerGameData pgdC;
     public PlayerTag pt; //this PlayerTag
     public PlayerTag ptC; //collided player PlayerTag
@@ -57,6 +59,30 @@ public class PlayerTag : NetworkBehaviour {
 
     void BeTagged()
     {
+        //pass array with random postions for boosts & array of random types
+        Vector3[] randomPos = new Vector3[1];
+        for (int i = 0; i < randomPos.Length; i++)
+        {
+            int x = (int)(Random.value * 100) - 50;
+            int z = (int)(Random.value * 100) - 50;
+            randomPos[i] = new Vector3(x, 6, z);
+            for (int j = i - 1; j >= 0; j--)
+            {
+                if (randomPos[i] == randomPos[j])
+                {
+                    x = (int)(Random.value * 100) - 50;
+                    z = (int)(Random.value * 100) - 50;
+                    randomPos[i] = new Vector3(x, 6, z);
+                    j = i - 1;
+                }
+            }
+        }
+        int[] randomType = new int[randomPos.Length];
+        for (int i = 0; i < randomPos.Length; i++)
+        {
+            randomType[i] = Mathf.RoundToInt(Random.value);
+        }
+        pb.CmdSpawnBoosts(randomPos, randomType);
         CmdBeTagged();
     }
     //sync tag state to server & clients
@@ -71,7 +97,7 @@ public class PlayerTag : NetworkBehaviour {
         //tag this player
         tagged = true;
         rend.material.color = Color.red;
-        //get all clients to start game
+        //get all clients to start game & spawn boosts
         clients = GameObject.FindGameObjectsWithTag("Player");
         foreach(GameObject client in clients)
         {
@@ -83,7 +109,7 @@ public class PlayerTag : NetworkBehaviour {
     {
         if (isLocalPlayer)
         {
-            //disable tag button and game over text & tag the tagged player & set UI references
+            //disable tag button and game over text & tag the tagged player
             beTaggedButton.SetActive(false);
             gameOverText.text = "";
             if (tagged)
@@ -94,6 +120,7 @@ public class PlayerTag : NetworkBehaviour {
                 collided = true;
                 Invoke("CollOff", 15f);
             }
+            //set board data & set UI references
             pgd.SetBoard();
             CmdReferenceUI();
         }
@@ -260,16 +287,21 @@ public class PlayerTag : NetworkBehaviour {
         clients = GameObject.FindGameObjectsWithTag("Player");
         foreach (GameObject client in clients)
         {
-            client.GetComponent<PlayerTag>().GameOver();
+            client.GetComponent<PlayerTag>().GameOver(pgd.playerName);
         }
     }
-    void GameOver()
+    void GameOver(string _name)
     {
         if (isLocalPlayer)
         {
             //show game over UI & enable tag button
-            gameOverText.text = "Game Over\nName Lost";
+            gameOverText.text = "Game Over\n" + _name + " Lost";
             beTaggedButton.SetActive(true);
+            Invoke("DisableGameOverText", 3f);
         }
+    }
+    void DisableGameOverText()
+    {
+        gameOverText.text = "";
     }
 }

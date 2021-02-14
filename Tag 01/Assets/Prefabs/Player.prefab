@@ -125,6 +125,7 @@ GameObject:
   - component: {fileID: 114160416377777538}
   - component: {fileID: 114213217656996066}
   - component: {fileID: 114909680926145542}
+  - component: {fileID: 114281581534154794}
   - component: {fileID: 114063859421570350}
   - component: {fileID: 114326665629795572}
   - component: {fileID: 114533943667516930}
@@ -1397,6 +1398,7 @@ MonoBehaviour:
   - {fileID: 81717136777618102}
   - {fileID: 114213217656996066}
   - {fileID: 114909680926145542}
+  - {fileID: 114281581534154794}
   playerUI: {fileID: 1631746824867814}
 --- !u!114 &114067959296823040
 MonoBehaviour:
@@ -1587,6 +1589,7 @@ MonoBehaviour:
   tagged: 0
   collided: 0
   pgd: {fileID: 114909680926145542}
+  pb: {fileID: 114281581534154794}
   pgdC: {fileID: 0}
   pt: {fileID: 0}
   ptC: {fileID: 0}
@@ -1624,6 +1627,20 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Tagged
+--- !u!114 &114281581534154794
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1165534687549506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8fe396f80f66394a817810e6d8a2133, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ui: {fileID: 1139737736319442}
+  prefab: {fileID: 1911667745965872, guid: 7f608408346dccd4797b76dfba086a33, type: 2}
+  boosts: []
 --- !u!114 &114305256282129332
 MonoBehaviour:
   m_ObjectHideFlags: 1
