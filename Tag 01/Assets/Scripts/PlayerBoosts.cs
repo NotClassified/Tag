@@ -8,6 +8,7 @@ public class PlayerBoosts : NetworkBehaviour {
     [SerializeField]
     GameObject ui;
     public Text boostNam;
+    public Text boostTimer;
     bool haveBoost = false;
 
     [SerializeField]
@@ -16,14 +17,21 @@ public class PlayerBoosts : NetworkBehaviour {
 
     [SerializeField]
     List<GameObject> boosts = new List<GameObject>();
-    /*
-    float timer;
-    public bool countdown;
-    */
+
+    float timer = 5;
+    bool countdown = false;
+    bool applyingBoost = false;
+    bool appliedSpeed = false;
+    bool appliedJump = false;
+    [SerializeField]
+    Player_Movement pm;
+
     private void Start()
     {
         boostNam = ui.transform.GetChild(2).GetChild(1).gameObject.GetComponent<Text>();
         boostNam.text = "";
+        boostTimer = ui.transform.GetChild(2).GetChild(2).gameObject.GetComponent<Text>();
+        boostTimer.text = "";
         parent = GameObject.Find("Boosts").transform;
     }
     
@@ -49,27 +57,66 @@ public class PlayerBoosts : NetworkBehaviour {
         }
     }
 
-    /*
     private void Update()
     {
         if (countdown && timer > 0)
+        {
             timer -= Time.deltaTime;
+            boostTimer.text = "" + Mathf.RoundToInt(timer);
+        }
         else if (timer <= 0)
         {
-            timer = 30;
+            countdown = false;
+            boostTimer.text = "";
+            timer = 5;
+            applyingBoost = false;
+            if (appliedSpeed)
+            {
+                appliedSpeed = false;
+                pm.origin_speed -= 2;
+                pm.diagnol_speed = pm.origin_speed / Mathf.Sqrt(2);
+            }
+            if (appliedJump)
+            {
+                appliedJump = false;
+                pm.jump_speed = 250;
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.E) && haveBoost)
+        {
+            haveBoost = false;
+            if (boostNam.text.Equals("Speed"))
+            {
+                haveBoost = false;
+                applyingBoost = true;
+                countdown = true;
+                boostNam.text = "";
+                appliedSpeed = true;
+                pm.origin_speed += 2;
+                pm.diagnol_speed = pm.origin_speed / Mathf.Sqrt(2);
+            }
+            else if (boostNam.text.Equals("Jump"))
+            {
+                haveBoost = false;
+                applyingBoost = true;
+                countdown = true;
+                boostNam.text = "";
+                appliedJump = true;
+                pm.jump_speed = 500;
+            }
         }
     }
-    */
+
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Boost"))
+        if (collision.gameObject.CompareTag("Boost") && !applyingBoost && !haveBoost)
         {
-            if (collision.gameObject.GetComponent<BoostData>().type.Equals("speed") && !haveBoost)
+            if (collision.gameObject.GetComponent<BoostData>().type.Equals("speed"))
             {
                 boostNam.text = "Speed";
                 haveBoost = true;
             }
-            else if (collision.gameObject.GetComponent<BoostData>().type.Equals("jump") && !haveBoost)
+            else if (collision.gameObject.GetComponent<BoostData>().type.Equals("jump"))
             {
                 boostNam.text = "Jump";
                 haveBoost = true;
@@ -96,4 +143,5 @@ public class PlayerBoosts : NetworkBehaviour {
         boosts[_indexCollision].GetComponent<BoostData>().SetBoostData(_randomType);
         boosts[_indexCollision].transform.position = _randomPos;
     }
+    
 }

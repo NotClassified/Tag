@@ -61,7 +61,7 @@ public class PlayerTag : NetworkBehaviour {
     void BeTagged()
     {
         //pass array with random postions for boosts & array of random types
-        Vector3[] randomPos = new Vector3[1];
+        Vector3[] randomPos = new Vector3[8 - GameObject.FindGameObjectsWithTag("Player").Length];
         for (int i = 0; i < randomPos.Length; i++)
         {
             int x = (int)(Random.value * 100) - 50;
