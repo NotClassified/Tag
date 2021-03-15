@@ -7,8 +7,6 @@ public class PlayerTag : NetworkBehaviour {
     //UI: Buttons and Texts
     public GameObject playerUI;
     public GameObject gameButtons;
-    public GameObject beTaggedButton;
-    public GameObject inputField;
     public Text taggedText;
     Text timerText;
     Text gameTimerText;
@@ -31,6 +29,8 @@ public class PlayerTag : NetworkBehaviour {
     PlayerGameData pgd;
     [SerializeField]
     PlayerBoosts pb;
+    [SerializeField]
+    Player_Menu ppm;
     public PlayerGameData pgdC;
     public PlayerTag pt; //this PlayerTag
     public PlayerTag ptC; //collided player PlayerTag
@@ -54,14 +54,12 @@ public class PlayerTag : NetworkBehaviour {
         gameTimerText.text = "";
         gameOverText = gameButtons.transform.GetChild(5).gameObject.GetComponent<Text>();
         gameOverText.text = "";
-        beTaggedButton = gameButtons.transform.GetChild(0).gameObject;
-        beTaggedButton.GetComponent<Button>().onClick.AddListener(BeTagged);
     }
 
-    void BeTagged()
+    public void BeTagged()
     {
         //pass array with random postions for boosts & array of random types
-        Vector3[] randomPos = new Vector3[8 - GameObject.FindGameObjectsWithTag("Player").Length];
+        Vector3[] randomPos = new Vector3[12 - GameObject.FindGameObjectsWithTag("Player").Length];
         for (int i = 0; i < randomPos.Length; i++)
         {
             int x = (int)(Random.value * 100) - 50;
@@ -84,13 +82,13 @@ public class PlayerTag : NetworkBehaviour {
             randomType[i] = Mathf.RoundToInt(Random.value);
         }
         pb.CmdSpawnBoosts(randomPos, randomType);
-        CmdBeTagged();
+        CmdBeTagged(ppm.startTagTimer, ppm.tagTimer);
     }
     //sync tag state to server & clients
     [Command]
-    void CmdBeTagged() { RpcBeTagged(); }
+    void CmdBeTagged(int _startTagTimer, int _tagTimer) { RpcBeTagged(_startTagTimer, _tagTimer); }
     [ClientRpc]
-    void RpcBeTagged()
+    void RpcBeTagged(int _startTagTimer, int _tagTimer)
     {
         //tag this player
         tagged = true;
@@ -99,26 +97,29 @@ public class PlayerTag : NetworkBehaviour {
         clients = GameObject.FindGameObjectsWithTag("Player");
         foreach(GameObject client in clients)
         {
-            client.GetComponent<PlayerTag>().StartGame();
+            client.GetComponent<PlayerTag>().StartGame(_startTagTimer, _tagTimer);
         }
     }
 
-    void StartGame()
+    void StartGame(int _startTagTimer, int _tagTimer)
     {
         if (isLocalPlayer)
         {
-            //disable tag button and game over text & tag the tagged player
-            beTaggedButton.SetActive(false);
-            inputField.SetActive(false);
+            //disable game over text & tag the tagged player
             gameOverText.text = "";
             pb.boostNam.text = "";
+            pb.haveBoost = false;
+            ppm.gameState = true;
+            //set time variables
+            ppm.startTagTimer = _startTagTimer;
+            ppm.tagTimer = _tagTimer;
             if (tagged)
             {
                 taggedText.text = "Tagged";
-                TaggedTimerStart(15);
+                TaggedTimerStart(ppm.startTagTimer);
                 CmdColl(true);
                 collided = true;
-                Invoke("CollOff", 15f);
+                Invoke("CollOff", (ppm.startTagTimer));
             }
             //set board data & set UI references
             pgd.SetBoard();
@@ -156,7 +157,7 @@ public class PlayerTag : NetworkBehaviour {
                 {
                     //untag this player & tag the collided player & set the collided player to collided to aviod repeat of this method
                     //change tagged text of this player
-                    CmdTag(false, true);
+                    CmdTag(false, true, ppm.startTagTimer);
                     taggedText.text = "";
                     gameCountdown = false;
                     gameTimer = 0;
@@ -189,9 +190,9 @@ public class PlayerTag : NetworkBehaviour {
 
     //sync tag state to server & clients
     [Command]
-    void CmdTag(bool _tagged, bool _tag) { RpcTag(_tagged, _tag); }
+    void CmdTag(bool _tagged, bool _tag, int _startTagTimer) { RpcTag(_tagged, _tag, _startTagTimer); }
     [ClientRpc]
-    void RpcTag(bool _tagged, bool _tag)
+    void RpcTag(bool _tagged, bool _tag, int _startTagTimer)
     {
         rend.material.color = Color.black;
         rendC.material.color = Color.red;
@@ -199,9 +200,9 @@ public class PlayerTag : NetworkBehaviour {
         ptC.collided = true;
         ptC.tagged = _tag;
         ptC.taggedText.text = "Tagged";
-        ptC.TaggedTimerStart(5);
-        pgd.SetScore(1, 0);
-        pgdC.SetScore(0, 1);
+        ptC.TaggedTimerStart(_startTagTimer);
+        pgd.SetScore(1, 0, 0);
+        pgdC.SetScore(0, 1, 0);
     }
 
     void TaggedTimerStart(int _time)
@@ -221,7 +222,7 @@ public class PlayerTag : NetworkBehaviour {
             pm.origin_speed = 2;
             pm.diagnol_speed = pm.origin_speed / Mathf.Sqrt(2);
             countdown = false;
-            gameTimer = 30;
+            gameTimer = ppm.tagTimer;
         }
     }
     void Update()
@@ -252,11 +253,12 @@ public class PlayerTag : NetworkBehaviour {
             gameTimerText.text = "";
             gameCountdown = false;
             taggedText.text = "";
+            pgd.SetScore(0, 0, 1);
             CmdGameOver();
         }
     }
     [Command]
-    void CmdGameOver() { RpcGameOver(); }
+    public void CmdGameOver() { RpcGameOver(); }
     [ClientRpc]
     void RpcGameOver()
     {
@@ -273,10 +275,21 @@ public class PlayerTag : NetworkBehaviour {
     {
         if (isLocalPlayer)
         {
+            //make sure player can move
+            pm.running = false;
+            pm.origin_speed = 2;
+            pm.diagnol_speed = pm.origin_speed / Mathf.Sqrt(2);
+            //reset timers
+            timer = 0;
+            countdown = false;
+            timerText.text = "";
+            gameTimer = 0;
+            gameCountdown = false;
+            gameTimerText.text = "";
             //show game over UI & enable tag button
+            taggedText.text = "";
             gameOverText.text = "Game Over\n" + _name + " Lost";
-            beTaggedButton.SetActive(true);
-            inputField.SetActive(true);
+            ppm.gameState = false;
             Invoke("DisableGameOverText", 3f);
         }
     }

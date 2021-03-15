@@ -9,6 +9,7 @@ public class PlayerGameData : NetworkBehaviour {
     public string playerName;
     public int numTags;
     public int numTagged;
+    public int numLosts;
 
 
     private void Start()
@@ -21,7 +22,10 @@ public class PlayerGameData : NetworkBehaviour {
     [ClientRpc]
     void RpcSetName(string _name)
     {
-        playerName = _name;
+        if(_name != "")
+            playerName = _name;
+        else
+            playerName = "Unknown";
     }
 
     public void SetBoard()
@@ -31,25 +35,32 @@ public class PlayerGameData : NetworkBehaviour {
         {
             sb.boardItems.Add(Instantiate(sb.prefab));
             sb.boardItems[i].transform.SetParent(sb.content.transform);
+            sb.boardItems[i].GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
             sb.boardItems[i].transform.GetChild(0).GetComponent<Text>().text = sb.clientNames[i];
             sb.boardItems[i].transform.GetChild(1).GetComponent<Text>().text = "" + sb.clientTags[i];
             sb.boardItems[i].transform.GetChild(2).GetComponent<Text>().text = "" + sb.clientTagged[i];
+            sb.boardItems[i].transform.GetChild(3).GetComponent<Text>().text = "" + sb.clientLosts[i];
         }
     }
 
-    public void SetScore(int _tags, int _tagged)
+    public void SetScore(int _tags, int _tagged, int _losts)
     {
-        numTags += _tags;
-        numTagged += _tagged;
-        CmdSetScores(numTags, numTagged);
+        if (hasAuthority)
+        {
+            numTags += _tags;
+            numTagged += _tagged;
+            numLosts += _losts;
+            CmdSetScores(numTags, numTagged, numLosts);
+        }
     }
     [Command]
-    void CmdSetScores(int _tags, int _tagged) { RpcSetScores(_tags, _tagged); }
+    void CmdSetScores(int _tags, int _tagged, int _losts) { RpcSetScores(_tags, _tagged, _losts); }
     [ClientRpc]
-    void RpcSetScores(int _tags, int _tagged)
+    void RpcSetScores(int _tags, int _tagged, int _losts)
     {
         sb.boardItems[sb.clientNames.IndexOf(playerName)].transform.GetChild(1).GetComponent<Text>().text = "" + _tags;
         sb.boardItems[sb.clientNames.IndexOf(playerName)].transform.GetChild(2).GetComponent<Text>().text = "" + _tagged;
+        sb.boardItems[sb.clientNames.IndexOf(playerName)].transform.GetChild(3).GetComponent<Text>().text = "" + _losts;
     }
 
     void Update () {

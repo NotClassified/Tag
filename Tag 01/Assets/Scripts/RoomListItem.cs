@@ -18,7 +18,7 @@ public class RoomListItem : MonoBehaviour {
     {
         match = _match;
         joinRoomCallBack = _joinRoomCallBack;
-        roomNameText.text = match.name + " (" + match.maxSize + "/" + match.maxSize + ")";
+        roomNameText.text = match.name + " (" + match.currentSize + "/" + match.maxSize + ")";
     }
 
     public void JoinRoom()

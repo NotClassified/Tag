@@ -9,7 +9,7 @@ public class PlayerBoosts : NetworkBehaviour {
     GameObject ui;
     public Text boostNam;
     public Text boostTimer;
-    bool haveBoost = false;
+    public bool haveBoost = false;
 
     [SerializeField]
     GameObject prefab;

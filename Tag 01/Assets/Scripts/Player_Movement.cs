@@ -2,15 +2,14 @@
 using UnityEngine.Networking;
 
 public class Player_Movement : NetworkBehaviour {
-
     
     public float speed;
     public float origin_speed;
     public float diagnol_speed;
     public float jump_speed;
-    float rotate_speed;
     public float velocityY;
     int localRotation;
+    public float viewSpeed;
     public Rigidbody rb;
     Transform crb;
     public bool tagged;
@@ -25,6 +24,10 @@ public class Player_Movement : NetworkBehaviour {
     AnimationStateController asc;
     public PlayerTag pt;
     GameObject character;
+    [SerializeField]
+    GameObject pauseMenu;
+    [SerializeField]
+    Player_Menu ppm;
 
     public override void OnStartLocalPlayer()
     {
@@ -40,7 +43,42 @@ public class Player_Movement : NetworkBehaviour {
     }
     void Update ()
     {
+        if (Input.GetKeyDown(KeyCode.Escape) && !pauseMenu.activeSelf)
+        {
+            if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) &&
+                !Input.GetKey(KeyCode.E) && !Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.Space) && 
+                !Input.GetKey(KeyCode.Tab) && !Input.GetKey(KeyCode.T))
+            {
+                pauseMenu.SetActive(true);
+            }
+        }
+        else if (Input.GetKeyDown(KeyCode.Escape) && pauseMenu.activeSelf)
+        {
+            if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) &&
+                !Input.GetKey(KeyCode.E) && !Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.Space) && 
+                !Input.GetKey(KeyCode.Tab) && !Input.GetKey(KeyCode.T))
+            {
+                pauseMenu.SetActive(false);
+            }
+        }
+        if (pauseMenu.activeSelf)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            return;
+        }
+        else if (!pauseMenu.activeSelf)
+            Cursor.lockState = CursorLockMode.Locked;
+
+        if (Input.GetKeyDown(KeyCode.T) && !ppm.gameState)
+        {
+            pt.BeTagged();
+        }
+
         float x = Input.GetAxis("Mouse X");
+        if (Input.GetKey(KeyCode.RightArrow))
+            x = viewSpeed;
+        if (Input.GetKey(KeyCode.LeftArrow))
+            x = -viewSpeed;
         transform.Rotate( 0, x, 0);
         localRotation = (int)(transform.eulerAngles.y) + 180;
         if (Input.GetKey(KeyCode.W))

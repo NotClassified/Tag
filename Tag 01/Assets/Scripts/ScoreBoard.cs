@@ -15,7 +15,8 @@ public class ScoreBoard : NetworkBehaviour {
     public List<string> clientNames = new List<string>();
     public List<int> clientTags = new List<int>();
     public List<int> clientTagged = new List<int>();
-    
+    public List<int> clientLosts = new List<int>();
+
     private void Start()
     {
         canvas.SetActive(false);
@@ -27,6 +28,7 @@ public class ScoreBoard : NetworkBehaviour {
         clientNames.Clear();
         clientTags.Clear();
         clientTagged.Clear();
+        clientLosts.Clear();
         foreach (Transform child in content.transform)
             Destroy(child.gameObject);
         clients = GameObject.FindGameObjectsWithTag("Player");
@@ -35,6 +37,7 @@ public class ScoreBoard : NetworkBehaviour {
             clientNames.Add(client.GetComponent<PlayerGameData>().playerName);
             clientTags.Add(client.GetComponent<PlayerGameData>().numTags);
             clientTagged.Add(client.GetComponent<PlayerGameData>().numTagged);
+            clientLosts.Add(client.GetComponent<PlayerGameData>().numLosts);
         }
     }
 }

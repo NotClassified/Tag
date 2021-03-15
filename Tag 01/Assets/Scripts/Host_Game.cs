@@ -3,9 +3,7 @@ using UnityEngine.Networking;
 using UnityEngine.UI;
 
 public class Host_Game : MonoBehaviour {
-
-    [SerializeField]
-    private uint roomSize = 6;
+    
 
     private string roomName;
 
@@ -37,8 +35,7 @@ public class Host_Game : MonoBehaviour {
         status.text = "Creating Room";
         if (roomName != "" && roomName != null)
         {
-            Debug.Log(roomName + " has " + roomSize + "players");
-            nm.matchMaker.CreateMatch(roomName, roomSize, true, "", "", "", 0, 0, nm.OnMatchCreate);
+            nm.matchMaker.CreateMatch(roomName, nm.matchSize, true, "", "", "", 0, 0, nm.OnMatchCreate);
         }
     }
     public void OnEnterGame()
