@@ -15,8 +15,16 @@ public class Host_Game : MonoBehaviour {
     [SerializeField]
     private Text status;
 
-    private void Start()
+    [SerializeField]
+    GameObject quitButton;
+    [SerializeField]
+    GameObject quitValidation;
+
+    public void Start()
     {
+        cam.SetActive(true);
+        quitButton.SetActive(true);
+        quitValidation.SetActive(false);
         main_menu.SetActive(true);
         nm = NetworkManager.singleton;
         if(nm.matchMaker == null)
@@ -43,5 +51,23 @@ public class Host_Game : MonoBehaviour {
         status.text = "";
         cam.SetActive(false);
         main_menu.SetActive(false);
+    }
+
+    public void QuitButton()
+    {
+        quitButton.SetActive(false);
+        quitValidation.SetActive(true);
+    }
+    public void QuitAnswer(string _answer)
+    {
+        if(_answer == "Yes")
+        {
+            Application.Quit();
+        }
+        if (_answer == "No")
+        {
+            quitButton.SetActive(true);
+            quitValidation.SetActive(false);
+        }
     }
 }

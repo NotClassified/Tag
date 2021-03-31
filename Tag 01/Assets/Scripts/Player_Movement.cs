@@ -8,7 +8,7 @@ public class Player_Movement : NetworkBehaviour {
     public float diagnol_speed;
     public float jump_speed;
     public float velocityY;
-    int localRotation;
+    public int localRotation;
     public float viewSpeed;
     public Rigidbody rb;
     Transform crb;
@@ -19,6 +19,11 @@ public class Player_Movement : NetworkBehaviour {
     bool dPressing;
     bool aPressing;
     bool sPressing;
+    Vector3 raypos;
+    public float rayLength;
+    RaycastHit hit;
+    bool hitting;
+
     public GameObject networkmanager;
     public NetworkIdentity nwID;
     AnimationStateController asc;
@@ -74,16 +79,23 @@ public class Player_Movement : NetworkBehaviour {
             pt.BeTagged();
         }
 
-        float x = Input.GetAxis("Mouse X");
-        if (Input.GetKey(KeyCode.RightArrow))
-            x = viewSpeed;
-        if (Input.GetKey(KeyCode.LeftArrow))
-            x = -viewSpeed;
-        transform.Rotate( 0, x, 0);
+        raypos = new Vector3(crb.position.x, crb.position.y + .05f, crb.position.z);
+        Ray ray = new Ray(raypos, -crb.forward);
+        if (Physics.Raycast(ray, out hit, rayLength/*[0]*/))
+        {
+            if (!(hit.collider.tag == "Player" || hit.collider.tag == "Boost"))
+                hitting = true;
+            else
+                hitting = false;
+        }
+        else
+            hitting = false;
+
         localRotation = (int)(transform.eulerAngles.y) + 180;
         if (Input.GetKey(KeyCode.W))
         {
-            rb.transform.position += transform.forward * Time.deltaTime * speed;
+            if (!hitting)
+                rb.transform.position += transform.forward * Time.deltaTime * speed;
             wPressing = true;
             if (!diagnolDirection)
                 crb.eulerAngles = new Vector3(0, localRotation, 0);
@@ -93,7 +105,8 @@ public class Player_Movement : NetworkBehaviour {
 
         if (Input.GetKey(KeyCode.D))
         {
-            rb.transform.position += transform.right * Time.deltaTime * speed;
+            if (!hitting)
+                rb.transform.position += transform.right * Time.deltaTime * speed;
             dPressing = true;
             if (!diagnolDirection)
                 crb.eulerAngles = new Vector3(0, localRotation + 90, 0);
@@ -103,7 +116,8 @@ public class Player_Movement : NetworkBehaviour {
 
         if (Input.GetKey(KeyCode.A))
         {
-            rb.transform.position -= transform.right * Time.deltaTime * speed;
+            if (!hitting)
+                rb.transform.position -= transform.right * Time.deltaTime * speed;
             aPressing = true;
             if (!diagnolDirection)
                 crb.eulerAngles = new Vector3(0, localRotation - 90, 0);
@@ -113,7 +127,8 @@ public class Player_Movement : NetworkBehaviour {
 
         if (Input.GetKey(KeyCode.S))
         {
-            rb.transform.position -= transform.forward * Time.deltaTime * speed;
+            if (!hitting)
+                rb.transform.position -= transform.forward * Time.deltaTime * speed;
             sPressing = true;
             if (!diagnolDirection)
                 crb.eulerAngles = new Vector3(0, localRotation + 180, 0);
@@ -188,7 +203,15 @@ public class Player_Movement : NetworkBehaviour {
         }
     }
 
-
+    void LateUpdate()
+    {
+        float x = Input.GetAxis("Mouse X");
+        if (Input.GetKey(KeyCode.RightArrow))
+            x = viewSpeed / 2;
+        if (Input.GetKey(KeyCode.LeftArrow))
+            x = -viewSpeed / 2;
+        transform.Rotate(0, x, 0);
+    }
     void GoInAir()
     {
         if(!(velocityY < 0.001f && velocityY > -0.001f))

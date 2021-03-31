@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
+using UnityEngine.Networking.Match;
 
 public class Player_Menu : MonoBehaviour {
 
@@ -10,11 +12,21 @@ public class Player_Menu : MonoBehaviour {
     Player_Movement pm;
     [SerializeField]
     PlayerTag pt;
+    JoinGame jg;
+    Host_Game hg;
+    private NetworkManager nm;
 
     public int startTagTimer;
     public int tagTimer;
 
     public bool gameState = false;
+
+    private void Start()
+    {
+        nm = NetworkManager.singleton;
+        jg = GameObject.Find("Join Game").GetComponent<JoinGame>();
+        hg = GameObject.Find("Network Manager").GetComponent<Host_Game>();
+    }
 
     private void Update()
     {
@@ -103,5 +115,14 @@ public class Player_Menu : MonoBehaviour {
             pauseMenu.SetActive(false);
             pt.CmdGameOver();
         }
+    }
+
+    public void DisconnectButton()
+    {
+        MatchInfo mI = nm.matchInfo;
+        nm.matchMaker.DropConnection(mI.networkId, mI.nodeId, 0, nm.OnDropConnection);
+        nm.StopHost();
+        jg.Start();
+        hg.Start();
     }
 }

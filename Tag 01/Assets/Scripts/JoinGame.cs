@@ -19,7 +19,7 @@ public class JoinGame : MonoBehaviour {
 
     private NetworkManager nm;
 
-    private void Start()
+    public void Start()
     {
         nm = NetworkManager.singleton;
         if (nm.matchMaker == null)

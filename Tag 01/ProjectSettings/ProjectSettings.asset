@@ -231,37 +231,37 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 0}
+      m_Icon: {fileID: 2800000, guid: ec8804aee147d5d4f9a4ae93a562dc21, type: 3}
       m_Width: 128
       m_Height: 128
   - m_BuildTarget: Standalone
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 83de869a83c700a4d8cf0a9932aafbe6, type: 3}
+      m_Icon: {fileID: 2800000, guid: ec8804aee147d5d4f9a4ae93a562dc21, type: 3}
       m_Width: 1024
       m_Height: 1024
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 82127d129a6dccb4eb39edf575272d1b, type: 3}
+      m_Icon: {fileID: 0}
       m_Width: 512
       m_Height: 512
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: e38332f174dbdb14189053d412c56fb1, type: 3}
+      m_Icon: {fileID: 0}
       m_Width: 256
       m_Height: 256
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 085c24be01369a64cbf3959dda60f221, type: 3}
+      m_Icon: {fileID: 0}
       m_Width: 128
       m_Height: 128
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 3293bef15de091e4d963aca73abfca1b, type: 3}
+      m_Icon: {fileID: 0}
       m_Width: 48
       m_Height: 48
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 0cfd910f50fd7b4409eed89e8396da85, type: 3}
+      m_Icon: {fileID: 0}
       m_Width: 32
       m_Height: 32
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 03ee7b4e2e3aa3445b23de926b4ead50, type: 3}
+      m_Icon: {fileID: 0}
       m_Width: 16
       m_Height: 16
   m_BuildTargetBatching: []
